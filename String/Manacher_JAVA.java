@@ -1,7 +1,4 @@
-
-
 public class manacher {
-
 	    public static String Manacher(String s) {
 	    	String t = preprocess(s);  // transformed string
 	        int[] p = new int[t.length()];   //p[i] = length of longest palindromic substring of t, centered at i
@@ -13,8 +10,8 @@ public class manacher {
 	            int iMirror = 2 * center - i;            
 	            p[i] = right > i ? Math.min(p[iMirror], right - i) : 0;
 	            while (t.charAt(i + p[i]) == t.charAt(i - p[i])) {
-                p[i]++;
-            }
+                	p[i]++;
+            	    }
 	 
 	            // if palindrome centered at i expands past right,
 	            // adjust center based on expanded palindrome.
@@ -56,14 +53,12 @@ public class manacher {
 	                center = i;
 	            }
 	        }
-	        
 	        return s.substring((center - 1 - maxLen) / 2, (center - 1 + maxLen) / 2);
 	    }
 
-	public static void main(String[] args) {
+	    public static void main(String[] args) {
 		String s = "a";
 		System.out.println(Manacher(s));
 
-	}
-
+	    }
 }
