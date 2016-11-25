@@ -2,7 +2,10 @@ package MultithreadsDemo;
 
 import java.util.concurrent.Semaphore;
 
-//So what is semaphore? The simplest way to think of a semaphore is to consider it an abstraction that 
+//The Semaphore flag signaling system is an alphabet signalling system based on the waving of 
+//a pair of hand-held flags in a particular pattern.
+
+//So what is semaphore in java? The simplest way to think of a semaphore is to consider it an abstraction that 
 //allows n units to be acquired, and offers acquire and release mechanisms. It safely allows us 
 //to ensure that only n processes can access a certain resource at a given time.
 //acquire() can get a permission,  release() can release a permission (must acquire() first)
