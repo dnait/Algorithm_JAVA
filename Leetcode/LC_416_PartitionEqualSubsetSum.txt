@@ -1,0 +1,73 @@
+416. Partition Equal Subset Sum
+Note:
+Each of the array element will not exceed 100.
+The array size will not exceed 200.
+
+Example 1:
+Input: [1, 5, 11, 5]
+Output: true
+Explanation: The array can be partitioned as [1, 5, 5] and [11].
+
+Example 2:
+Input: [1, 2, 3, 5]
+Output: false
+Explanation: The array cannot be partitioned into equal sum subsets.
+
+public class Solution {
+    public boolean canPartition(int[] nums) {
+        /**
+     * filter sum == odd
+     * DFS
+     * sort can prim the dfs
+     * */
+        Arrays.sort(nums);
+        int sum = 0;
+        for (int x : nums) sum += x;
+        if (sum % 2 == 1) return false;
+        sum /= 2;
+        return dfs(0, sum, nums);
+    }
+    
+    public boolean dfs(int index, int sum, int[] nums) {
+        sum -= nums[index];
+        if (sum == 0) return true;
+        for (int i = index + 1; i < nums.length; i++) {
+            if (sum < nums[i]) break;
+            if (dfs(i, sum, nums)) return true;
+        }
+        return false;
+    }
+}
+
+
+
+//DP
+public class Solution {
+    public boolean canPartition(int[] nums) {
+        int sum = 0;
+        for (int x : nums) sum += x;
+        if (sum % 2 == 1) return false;
+        sum /= 2;
+        int len = nums.length;
+        // dp[i][j]: if we take i nums, when the package size is j, how much we can take. 
+        int dp[][] = new int[len][sum + 1];
+        //dp[0][0]: no nums and no package, initialize the state;
+        for (int i = nums[0]; i <= sum; i++) {
+            dp[0][i] = nums[0];
+        }
+        
+        for (int i = 1; i < len; i++) {
+            for (int j = nums[i]; j <= sum; j++) {
+                dp[i][j] = Math.max(dp[i - 1][j], dp[i - 1][j - nums[i]] + nums[i]);
+            }
+        }
+        //when dp[i][j] = sum it will return true;
+        if (dp[len - 1][sum] == sum) {
+            return true;
+        } else {
+            return false;
+        }
+        
+        
+    }
+}
