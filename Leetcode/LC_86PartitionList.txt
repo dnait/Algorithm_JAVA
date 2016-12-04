@@ -1,0 +1,37 @@
+86. Partition List
+Given 1->4->3->2->5->2 and x = 3,
+return 1->2->2->4->3->5.
+
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) { val = x; }
+ * }
+ */
+public class Solution {
+    public ListNode partition(ListNode head, int x) {
+        ListNode smdummy = new ListNode(0);
+        ListNode lgdummy = new ListNode(0);
+        ListNode smptr = smdummy;
+        ListNode lgptr = lgdummy;
+        
+        if (head == null) return head;
+        while(head != null) {
+            
+            //cannot <= x or will have 3->1->1 situation
+            if (head.val < x) {
+                smptr.next = new ListNode(head.val); //smptr.next = head;
+                smptr = smptr.next;
+            } else {
+                lgptr.next = head;
+                lgptr = lgptr.next;
+            }
+            head = head.next;
+        }
+        smptr.next = lgdummy.next;
+        lgptr.next = null;
+        return smdummy.next;
+    }
+}
