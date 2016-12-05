@@ -1,0 +1,63 @@
+//267. Palindrome Permutation II
+//Given a string s, return all the palindromic permutations (without duplicates) of it. 
+//Return an empty list if no palindromic permutation could be form.
+//For example:
+//Given s = "aabb", return ["abba", "baab"].
+//Given s = "abc", return [].
+
+
+//TLE for thousands of “a” repeats.
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+public class permutationPalindrome {
+
+	public static void main(String[] args) {
+		String s1 = "aabb";
+		String s2 = "abc";
+		System.out.println(generatePalindromes(s1));   //[abba, baab]
+		System.out.println(generatePalindromes(s2));  //[]
+	}
+	
+
+    public static List<String> generatePalindromes(String s) {
+        List<String> res = new ArrayList<>();
+        if (s == null || s.length() == 0) return res;
+        char[] c = s.toCharArray();
+        dfs(c, 0, res);
+        return res;
+    }
+    private static void dfs(char[] c, int index, List<String> res) {
+        String tmp = new String(c);
+        if (isPalindrome(c) && index == c.length) {
+            res.add(tmp);
+        }
+        Set<Character> set = new HashSet<>();
+        for (int i = index; i < c.length; i++) {
+            if (set.add(c[i])) {
+                swap(c, i, index);
+                dfs(c, index + 1, res);
+                swap(c, i, index);
+            }
+        }
+    }
+    private static void swap(char[] c, int i, int j) {
+        if (i == j) return;
+        char tmp = c[i];
+        c[i] = c[j];
+        c[j] = tmp;
+    }
+    private static boolean isPalindrome(char[] c) {
+        int left = 0;
+        int right = c.length - 1;
+        while (left < right) {
+            if (c[left++] != c[right--]) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+}
