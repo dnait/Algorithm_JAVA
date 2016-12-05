@@ -25,7 +25,7 @@ public class Solution {
         if (k == 0) {
             res.add(new ArrayList<Integer>(tmp));  //need to new ArrayList<>(tmp), or will be null
         }
-        for (int i = index; i <= n; i++) {
+        for (int i = index; i <= n; i++) {   //also i starts from “index”, not 1
             tmp.add(i);
             dfs(n, i + 1, tmp, k - 1, res);
             tmp.remove(tmp.size() - 1);
