@@ -23,7 +23,7 @@ public class Solution {
     }
     private void dfs(int n, int index, List<Integer> tmp, int k, List<List<Integer>> res) {
         if (k == 0) {
-            res.add(new ArrayList<Integer>(tmp));
+            res.add(new ArrayList<Integer>(tmp));  //need to new ArrayList<>(tmp), or will be null
         }
         for (int i = index; i <= n; i++) {
             tmp.add(i);
