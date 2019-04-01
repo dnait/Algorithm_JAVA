@@ -1,1 +1,29 @@
 https://zoltinma.blogspot.com/2013/11/cc15015-compress-string-by-character.html
+Calculator  e.g (1+3)*100- 20/(4+1)
+BST insert, delete
+Recovery BST(two nodes are swaped)
+clone graph(BFS, DFS)
+Group isomorphic(title,paper    egg,add    hello,billy)
+Group Anagram
+以下内容需要积分高于 188 您已经可以浏览
+
+Kdistance Tree(given a target node, return all nodes that have K distance with it)
+Runlength(aaabbb->CaCb)
+Remove Duplicate. 1point3acres
+Merge Lists
+atoi
+wordLatter
+solve Sudoku
+Prefix trie(find string that can is used as prefix in other words)
+wipe char
+
+Weigh Random, Alien Dictionary, Number of island and its circumference
+new hash map, 
+print tree boundary
+LoginLogout merge
+Divide subsequences
+Tree width
+string combination 
+
+3.21 Technical Phone Screen： 白人小哥， 人感觉很好也很chill， 一道题，基本就是LC Course Schedule， 给一堆任务比如ABCD然后他们的dependencies，问这些任务能不能完成。 答 建graph，找Cycle， 如果有cycle就不能完成 （topo图其实就是）小哥说好，code吧
+code之前多次确认了input data type， 他这块比较松，为了自己能顺利完成，我把那些字符串ABCD都represent成int，一共有n个tasks 然后dependencies也是数字当然， map里面 key是task，value是一个list存所有的dependencies，方便之后遍历
