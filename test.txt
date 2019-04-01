@@ -27,3 +27,19 @@ string combination
 
 3.21 Technical Phone Screen： 白人小哥， 人感觉很好也很chill， 一道题，基本就是LC Course Schedule， 给一堆任务比如ABCD然后他们的dependencies，问这些任务能不能完成。 答 建graph，找Cycle， 如果有cycle就不能完成 （topo图其实就是）小哥说好，code吧
 code之前多次确认了input data type， 他这块比较松，为了自己能顺利完成，我把那些字符串ABCD都represent成int，一共有n个tasks 然后dependencies也是数字当然， map里面 key是task，value是一个list存所有的dependencies，方便之后遍历
+
+DS:
+大致是要找到一个整数的所有divider，然后求和
+一个序列，找出最大相邻数的和，相邻长度不限
+Python: given a list how to find all the possible combination of two numbers and their difference is 2.
+max running sum
+Two sum
+Reverse Integer
+就是在所有整数中找出满足一个数等于这个数所有的digit的五次方相加，比如abcd=a^5+b^5+c^5+d^5，然后把所有满足条件的数加起来求和
+一个k个元素的整数数列，随机sample一个点，然后改成NA，一直sample到全部数字都是NA，让你实现
+两个数组，Value= { 1,2,3,4,5}， Weight= {1, 0.5, 3, 33, 17}。 V是需要generate的数，W是weights。V,W 长度一样，number一一对应，写一个weighted随机发生器，即把W看成probability function, 随机generate V里的数。怎么样sample value， 使 sample 4 的可能性使3的 11 倍。
+给一个 log file，log file 里面每一行可能长这样
+akdsjflsj 127.0.0.1 asf alskdj alksfj;elifj
+kafsljlkjf; aklejf l;kaejlfkejflake 987.654.458.1
+flkasdjfl;a fklasdj flkaj l;fkdjas ;lkfj 123.123.123.123
+问所有 IP 出现的频率，依照多到少排序
