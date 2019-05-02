@@ -2,6 +2,7 @@ https://zoltinma.blogspot.com/2013/11/cc15015-compress-string-by-character.html
 https://www.cnblogs.com/grandyang/p/4606334.html 全汇总
 https://www.zybuluo.com/Yano/note/253417#generate-parentheses
 reflection: https://blog.csdn.net/smartboy_01/article/details/23201391
+reflection modification: https://github.com/JustinSDK/JavaSE6Tutorial/blob/master/docs/CH16.md
 
 Calculator  e.g (1+3)*100- 20/(4+1)
 BST insert, delete
