@@ -1,0 +1,109 @@
+
+Input:
+beginWord = "hit",
+endWord = "cog",
+wordList = ["hot","dot","dog","lot","log","cog"]
+
+Output: 5
+
+Explanation: As one shortest transformation is "hit" -> "hot" -> "dot" -> "dog" -> "cog",
+return its length 5.
+
+
+Input:
+beginWord = "hit"
+endWord = "cog"
+wordList = ["hot","dot","dog","lot","log"]
+
+Output: 0
+
+Explanation: The endWord "cog" is not in wordList, therefore no possible transformation.
+
+
+
+class Solution {
+    //two-end
+    public int ladderLength(String beginWord, String endWord, List<String> wordList) {
+        Set<String> wordSet = listToSet(wordList);
+        Set<String> smSet = new HashSet<String>();
+        Set<String> lgSet = new HashSet<String>();
+        int step = 0;
+        smSet.add(beginWord);
+        lgSet.add(endWord);
+        while(!smSet.isEmpty() && !lgSet.isEmpty() && !wordSet.isEmpty()) {
+            if (smSet.size() > lgSet.size()) {
+                swap(smSet, lgSet);
+            }
+            step++;
+            Set<String> pool = new HashSet<String>();
+            for (String word: smSet) {
+                for (int i = 0; i < word.length(); i++) {
+                    for (char c = 'a'; c <= 'z'; c++) {
+                        StringBuilder sb = new StringBuilder(word);
+                        sb.setCharAt(i, c);
+                        String candidate = sb.toString();
+                        if (lgSet.contains(candidate)) {
+                            return step + 1;
+                        }
+                        if (wordSet.contains(candidate)) {
+                            pool.add(candidate);
+                            wordSet.remove(candidate);
+                        }
+                    }
+                }
+            }
+            smSet = pool;                
+        }
+        return 0;
+        
+    }
+    private void swap(Set<String> set1, Set<String> set2) {
+        Set<String> tmp = set1;
+        set1 = set2;
+        set2 = tmp;
+    }
+    
+    //CANNOT pass 
+// "hit"
+// "cog"
+// ["hot","dot","dog","lot","log"] output 5, but expected 0;
+    public int ladderLengthWrong(String beginWord, String endWord, List<String> wordList) {
+        //cannot use DFS
+        //BFS with stack
+        Set<String> wordSet = listToSet(wordList);
+        LinkedList<String> queue = new LinkedList<String>();
+        queue.add(beginWord);
+        wordSet.add(endWord);
+        int step = 0;
+        while (!queue.isEmpty()) {
+            int size = queue.size();
+            step++;
+            for (int i = 0; i < size; i++) {
+                String curStr = queue.poll();
+                if (curStr.equals(endWord)) {
+                    return step;
+                }
+                for (int j = 0; j < curStr.length(); j++) {
+                    for (char c = 'a'; c <= 'z'; c++) {
+                        StringBuilder sb = new StringBuilder(curStr);
+                        sb.setCharAt(j, c);
+                        String candidate = sb.toString();
+                        if (wordSet.contains(candidate)) {
+                            queue.add(candidate);
+                            wordSet.remove(candidate);
+                        }
+                    }
+
+                }
+            } 
+        }
+        return 0;
+    }
+    private Set<String> listToSet(List<String> wordList){
+        Set<String> set = new HashSet<String>();
+        for (String s : wordList) {
+            set.add(s);
+        }
+        return set;
+    }
+}
