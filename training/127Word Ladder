@@ -20,6 +20,44 @@ Output: 0
 Explanation: The endWord "cog" is not in wordList, therefore no possible transformation.
 
 
+Shortest path, implicit graph 
+Method: BFS / bidirectional BFS 
+Time Complexity: 0(n*26^1) -> 0(n*26^1/2), 1 = len(word), n=len(wordlist)
+Space Complexity: 0(n) 
+
+//queue里面放什么？每一层放可能的合法路径 想当于bidirectional方法里面的nextpool的功能。
+q.push(start)
+step = 0 
+while not q.empty():
+ ++step 
+ size = q.size() 
+ while size-- > 0:
+   node = q.pop() 
+   new nodes = expand(node) ==> a-z替换来找到合适的下一层节点
+   if goal in new_nodes: return step + 1 
+   q.append(new_nodes) ==> new_nodes不是target就放到queue里面
+return NOT FOUND 
+
+
+s1.insert(start)
+s2.insert(end)
+step = 0 
+while not (sl.empty() 11 s2.empty()):
+  ++step 
+  swap*(s1 s2) ==> 想当于左边集合走一步，然后换右边的集合走一步
+  tmp = {}
+  for node in s1: ==> 当前集合来扩展
+    new nodes = expand(node) 
+    if any(new_nodes) in s2: return step + 1  ==> 集合相碰了
+    tmp.append(new_nodes) 
+  sl = tmp ==> s1集合换成第一层的合法的临时集合
+
+return NOT FOUND 
+
+
+
+
+
 class Solution {
     //Bidirectional BFS
     public int ladderLength(String beginWord, String endWord, List<String> wordList) {
