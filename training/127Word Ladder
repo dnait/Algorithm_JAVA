@@ -20,9 +20,98 @@ Output: 0
 Explanation: The endWord "cog" is not in wordList, therefore no possible transformation.
 
 
+class Solution {
+    //Bidirectional BFS
+    public int ladderLength(String beginWord, String endWord, List<String> wordList) {
+        Set<String> wordDict = new HashSet<>(wordList); //convert list to set
+        Set<String> s1 = new HashSet<>(); //Set并没有get index的用法，包括linkedhashset
+        Set<String> s2 = new HashSet<>();
+        s1.add(beginWord);
+        s2.add(endWord);
+        int step = 0;
+        while(!s1.isEmpty() && !s2.isEmpty()) {
+            step++;
+            //swap (s1, s2)
+            if (s1.size() > s2.size()) {
+                swapSet(s1, s2);
+            }
+            Set<String> pathSet = new HashSet<>();
+            for (String str : s1) {
+                for (int i = 0; i < str.length(); i++) {
+                    for (char c = 'a'; c <= 'z'; c++) {
+                        StringBuilder currSb = new StringBuilder(str);
+                        currSb.setCharAt(i, c);
+                        if (wordDict.contains(currSb.toString())) {
+                            if (s2.contains(currSb.toString())) {
+                                return step + 1;
+                            } else {
+                                wordDict.remove(currSb.toString());
+                                pathSet.add(currSb.toString());
+                            }
+
+                        }
+                    }
+                }
+            }
+            s1 = pathSet;
+        }
+        return 0;
+    }
+
+
+    
+    private void swapSet(Set<String> s1, Set<String> s2) {
+        Set<String> tmp = s1;
+        s1 = s2;
+        s2 = tmp;
+    }
+    
+    
+    
+    
+    
+    
+    
+    //BFS with queue
+    public int ladderLengthBFS(String beginWord, String endWord, List<String> wordList) {
+        //List list = new ArrayList(set); convert set to list就是这么简单
+        Set<String> wordDict = new HashSet<String>(wordList);
+        Queue<String> q = new LinkedList<String>();
+        q.offer(beginWord);
+        int step = 1;  //因为已经走了一步了，把第一个放在queue里面
+        while (!q.isEmpty()) {
+            step++;
+            int size = q.size();
+            while (size-- > 0) {
+                String curr = q.poll(); //q.poll() == q.pullFirst() 头的位置出来
+                for (int i = 0; i < curr.length(); i++) {
+                    for (char c = 'a'; c <= 'z'; c++) {
+                        StringBuilder currSb = new StringBuilder(curr);
+                        currSb.setCharAt(i, c);
+                        if (wordDict.contains(currSb.toString())) {
+                            if (endWord.equals(currSb.toString())) {
+                                return step;
+                            } else {
+                                wordDict.remove(currSb.toString());
+                                q.offer(currSb.toString());
+                            }
+                        }
+                        // if (endWord.equals(currSb.toString())) { //这行代码在例子2错误，因为endWord不在字典里，应//该返回0，但这里没有看字典，直接比较endWord，所以错误。
+                        //     return step;
+                        // } else if (wordDict.contains(currSb.toString())) {
+                        //     wordDict.remove(currSb.toString());
+                        //     q.offer(currSb.toString());
+                        // }
+                     }
+                }
+            }
+        }
+        return 0;
+    }
+}
 
 class Solution {
-    //two-end
+    //two-end long back
     public int ladderLength(String beginWord, String endWord, List<String> wordList) {
         Set<String> wordSet = listToSet(wordList);
         Set<String> smSet = new HashSet<String>();
@@ -62,48 +151,4 @@ class Solution {
         set1 = set2;
         set2 = tmp;
     }
-    
-    //CANNOT pass 
-// "hit"
-// "cog"
-// ["hot","dot","dog","lot","log"] output 5, but expected 0;
-    public int ladderLengthWrong(String beginWord, String endWord, List<String> wordList) {
-        //cannot use DFS
-        //BFS with stack
-        Set<String> wordSet = listToSet(wordList);
-        LinkedList<String> queue = new LinkedList<String>();
-        queue.add(beginWord);
-        wordSet.add(endWord);
-        int step = 0;
-        while (!queue.isEmpty()) {
-            int size = queue.size();
-            step++;
-            for (int i = 0; i < size; i++) {
-                String curStr = queue.poll();
-                if (curStr.equals(endWord)) {
-                    return step;
-                }
-                for (int j = 0; j < curStr.length(); j++) {
-                    for (char c = 'a'; c <= 'z'; c++) {
-                        StringBuilder sb = new StringBuilder(curStr);
-                        sb.setCharAt(j, c);
-                        String candidate = sb.toString();
-                        if (wordSet.contains(candidate)) {
-                            queue.add(candidate);
-                            wordSet.remove(candidate);
-                        }
-                    }
-
-                }
-            } 
-        }
-        return 0;
-    }
-    private Set<String> listToSet(List<String> wordList){
-        Set<String> set = new HashSet<String>();
-        for (String s : wordList) {
-            set.add(s);
-        }
-        return set;
-    }
-}
+ 
