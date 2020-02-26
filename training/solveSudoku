@@ -23,12 +23,12 @@ public class Solution {
                                 board[i][j] = '.'; //Otherwise go back
                         }
                     }
-                    
+                    //如果对一个格子尝试0-9都不行，说明整个sudoku无解，返回false;
                     return false;
                 }
             }
         }
-        return true;
+        return true; //整个棋盘'.'都填完了，就可以返回true;
     }
     
     private boolean isValid(char[][] board, int row, int col, char c){
