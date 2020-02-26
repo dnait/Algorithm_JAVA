@@ -1,5 +1,6 @@
 
-Try 1 through 9 for each cell. The time complexity should be 9 ^ m (m represents the number of blanks to be filled in), since each blank can have 9 choices. Details see comments inside code.
+Try 1 through 9 for each cell. The time complexity should be 9 ^ m (m represents the number of blanks to be filled in),
+ since each blank can have 9 choices. Details see comments inside code.
 
 public class Solution {
     public void solveSudoku(char[][] board) {
