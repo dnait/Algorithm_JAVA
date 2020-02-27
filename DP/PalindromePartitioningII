@@ -1,0 +1,91 @@
+32. Palindrome Partitioning II
+Given a string s, partition s such that every substring of the partition is a palindrome.
+Return the minimum cuts needed for a palindrome partitioning of s.
+
+Example:
+
+Input: "aab"
+Output: 1
+Explanation: The palindrome partitioning ["aa","b"] could be produced using 1 cut.
+
+class Solution {
+     public int minCut(String s) {
+         if (s == null | s.length() == 0) {
+            return 0;
+         }
+         boolean[][] isPal = new boolean[s.length()][s.length()];
+         int[] minCuts = new int[s.length() + 1];
+         int n = s.length();
+         for (int i = 0; i <= n; i++) {
+             minCuts[i] = n - 1 - i;//每个位置最多的cut,当然是每个单字符都切开就算一个回文。最后minCuts[n] = -1
+         }
+        //这个题目是用i从右边往左到0，然后j从i的位置看结尾的string是否是回文，可以理解。
+         //如果走过的地方，dp[i + 1][j - 1],因为i是变小的，j是变大的。
+         //则minCut[i]的位置min(miCut[i]就是当前最大的cut, minCut[j + 1] + 1) 就好像 i,,,j是回文，当然[i] = [j + 1] + 1切割数
+         for (int i = n - 1; i >= 0; i--) {
+             for (int j = i ; j < n; j++) {
+                 if (s.charAt(i) == s.charAt(j) && (j - i < 2 || isPal[i + 1][j - 1])) {
+                     isPal[i][j] = true;
+                     minCuts[i] = Math.min(minCuts[i], minCuts[j + 1] + 1); //开始初始值从左往右，但转移方程是往左，因为是min所以计算应该是越来越小。
+                 }
+             }
+         }
+         return minCuts[0];
+     }
+}
+    
+    
+    
+    
+    
+    
+    
+    //DFS with memorization
+    Map<String, Integer> map = new HashMap<String, Integer>();
+    public int minCut2(String s) {
+        if (map.containsKey(s)) {
+            return map.get(s);
+        }
+    
+    // If s is an empty string, the function will return -1. So if s
+        // itself is palindrome, the number of cut is 0.
+        int min = s.length() - 1;
+        for (int i = 1; i <= s.length(); i++) {
+            String subStr = s.substring(0, i);
+            if (isPalindrome(subStr)) {
+                    min = Math.min(min, 1 + minCut(s.substring(i)));
+            }
+            map.put(s, min);
+        }
+        return min;
+    }
+    private boolean isPalindrome(String str) {
+        int i = 0, j = str.length() - 1;
+        while (i < j) {
+            if (str.charAt(i) != str.charAt(j)) {
+                return false;
+            }
+            i++;
+            j--;
+        }
+        return true;
+    }
+    
+    
+    public int minCutDP(String s) {
+        if (s == null || s.length() == 0) return 0;
+        boolean[][] isPalindrome = new boolean[s.length()][s.length()];
+        int[] cuts = new int[s.length()];
+        for (int i = 0; i < s.length(); i++) {
+            int minCut = Integer.MAX_VALUE;
+            for (int j = 0; j <= i; j++) {
+                if (s.charAt(i) == s.charAt(j) && (j + 1 >= i || isPalindrome[j + 1][i - 1])) {
+                    isPalindrome[j][i] = true;
+                    minCut = j == 0 ? 0 : Math.min(minCut, cuts[j - 1] + 1);
+                }
+            }
+            cuts[i] = minCut;
+        }
+        return cuts[s.length() - 1];
+    }
+}
