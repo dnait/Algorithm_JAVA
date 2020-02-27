@@ -1,0 +1,74 @@
+115. Distinct Subsequences
+Hard
+
+961
+
+48
+
+Add to List
+
+Share
+Given a string S and a string T, count the number of distinct subsequences of S which equals T.
+
+A subsequence of a string is a new string which is formed from the original string by deleting some (can be none) of the characters without disturbing the relative positions of the remaining characters. (ie, "ACE" is a subsequence of "ABCDE" while "AEC" is not).
+
+Example 1:
+
+Input: S = "rabbbit", T = "rabbit"
+Output: 3
+Explanation:
+
+As shown below, there are 3 ways you can generate "rabbit" from S.
+(The caret symbol ^ means the chosen letters)
+
+rabbbit
+^^^^ ^^
+rabbbit
+^^ ^^^^
+rabbbit
+^^^ ^^^
+Example 2:
+
+Input: S = "babgbag", T = "bag"
+Output: 5
+Explanation:
+
+As shown below, there are 5 ways you can generate "bag" from S.
+(The caret symbol ^ means the chosen letters)
+
+babgbag
+^^ ^
+babgbag
+^^    ^
+babgbag
+^    ^^
+babgbag
+  ^  ^^
+babgbag
+    ^^^
+    
+    class Solution {
+    public int numDistinct(String s, String t) { //这是一道基础DP题目
+        //dp[i][j]:umber of distinct subsequences of S [0,i] which equals T[0,j].
+        //考虑这个一般都是考虑三个位置的转换公式
+        //  dp[i - 1][j - 1]
+        //  dp[i - 1][j] 
+        //  dp[i][j - 1] 这个就用不到了。
+        // x x x x x x i
+        // y y y y y j
+        //      如果[i]==[j]则前面[i-1]的subsequence在[j - 1]的个数是在i==j之后也是不变的，
+        //      else: 则比较[i-1]和[j]的位置。
+        if(s == null || t == null || t.length() == 0) return 0;
+        int[] dp = new int[t.length()];
+        
+        for(int i = 0; i<s.length(); i++){
+            char c = s.charAt(i);
+            for(int j=dp.length-1; j>=0; j--){
+                if(c == t.charAt(j)){
+                    dp[j] = dp[j] + (j != 0 ? dp[j-1]: 1);
+                }
+            }
+        }
+        return dp[t.length()-1];
+    }
+}
