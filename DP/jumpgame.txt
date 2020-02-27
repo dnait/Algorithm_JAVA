@@ -1,0 +1,62 @@
+class Solution {
+    
+     public boolean canJump(int[] nums) {
+         if (nums == null || nums.length < 2) return true;
+         int reachIndex = 0;
+         for (int i = 0; i < nums.length && i <= reachIndex; i++) {  //漏掉i <= reachIndex [3,2,1,0,4] 则返回true;
+             reachIndex = Math.max(reachIndex, nums[i] + i);
+             if (reachIndex >= nums.length - 1) {
+                 return true;
+             }
+         }
+         return false;
+     }
+    
+    
+    
+    public boolean canJump_ori(int[] nums) {
+        if (nums == null || nums.length < 2) {
+            return true;
+        }
+        int reachIndex = 0;
+        for (int i = 0; i < nums.length && i <= reachIndex; i++) {
+            reachIndex = Math.max(reachIndex, nums[i] + i);
+            if (reachIndex >= nums.length - 1) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+  public boolean canJumpDP(int[] nums) {
+      //用动规，设状态为f[i]，表示从第0 层出发，走到nums[i] 时剩余的最大步数，则状态转移方程为：
+        if (nums == null || nums.length == 0) {
+            return true;
+        }
+        int[] dp = new int[nums.length];
+        dp[0] = 0;
+        for (int i = 1; i < nums.length; i++) {
+            dp[i] = Math.max(dp[i - 1], nums[i - 1]) - 1;
+            if (dp[i] < 0) return false;
+        }
+        return dp[nums.length - 1] >= 0 ;
+    }
+    
+    
+    public boolean canJump2(int[] nums) {//Greedy
+        if (nums == null || nums.length == 0) {
+            return true;
+        } //from right to left;
+       // 逆向下楼梯，最左能下降到第几层
+        int n = nums.length;
+        int leftMostIndex = n - 1; //(0到leftMostIndex)
+        for (int i = n - 2; i >=0; i--) {
+            if (nums[i] + i >= leftMostIndex) {
+                leftMostIndex = i;
+            }
+        }
+        return leftMostIndex == 0;
+    }
+
+}
+
