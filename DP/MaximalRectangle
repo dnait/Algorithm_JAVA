@@ -1,0 +1,48 @@
+Maximal Rectangle
+
+Given a 2D binary matrix filled with 0's and 1's, find the largest rectangle containing only 1's and return its area.
+Example:
+
+Input:
+[
+  ["1","0","1","0","0"],
+  ["1","0","1","1","1"],
+  ["1","1","1","1","1"],
+  ["1","0","0","1","0"]
+]
+Output: 6
+
+class Solution {
+    public int maximalRectangle(char[][] matrix) {
+        if (matrix == null || matrix.length == 0 || matrix[0].length == 0) return 0;
+        int m = matrix.length, n = matrix[0].length;
+        int [] height = new int[n];//每个柱子对应的height;
+        
+        int max = 0;
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                height[j] = matrix[i][j] == '0' ? 0 : height[j] + 1; //注意这里不是0，而是字符'0',很容易错。
+            }
+            max = Math.max(max, largestRectangleArea(height));
+        }
+        return max;
+    }
+    
+    private int largestRectangleArea(int[] heights) { //跟84题代码一模一样
+        if (heights == null || heights.length == 0) return 0;
+        Stack<Integer> stack = new Stack<Integer>();
+        int maxArea = 0;
+        for (int i = 0; i <= heights.length; i++) {
+            int currHeight = i == heights.length ? 0 : heights[i]; //i=最后终点，高度为0，不用再多次考虑stack空与否
+            while ((!stack.isEmpty() && currHeight <= heights[stack.peek()])) {
+                int lastHeight = heights[stack.pop()];
+                //拿每次pop()的高度去跟当前的i算面经
+                int left = stack.isEmpty() ? 0 : stack.peek() + 1; //因为已经pop了，所以距离是再一个peek加1
+                maxArea = Math.max(maxArea, lastHeight * (i - left));
+            }
+            stack.push(i);
+           }
+        return maxArea;
+    }
+}
+
