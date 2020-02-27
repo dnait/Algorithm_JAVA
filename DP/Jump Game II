@@ -1,0 +1,84 @@
+Input: [2,3,1,1,4]
+Output: 2
+Explanation: The minimum number of jumps to reach the last index is 2.
+    Jump 1 step from index 0 to 1, then 3 steps to the last index.
+    
+    class Solution {
+    
+    public int jump(int[] nums) {
+        if (nums == null || nums.length == 0) return 0;
+        int lastReachIndex = 0, reachIndex = 0, steps = 0;
+        for (int i = 0; i < nums.length - 1; i++) { //[1]或者[0] 应该得出0,而不是1，所以要 i < nums.length - 1
+            //为啥只走到倒数第二个位置，因为i + nums[i] = reachIndex就看能不能到nums.length - 1的位置
+            reachIndex = Math.max(reachIndex, i + nums[i]);
+            if (lastReachIndex == i) {
+                steps++;
+                lastReachIndex = reachIndex;
+                if (reachIndex >= nums.length - 1) break;
+            }
+            
+        }
+        return steps;
+	}
+    
+    
+    public int jump2(int[] nums) {
+    	int reachIndex = 0, lastReachIndex = 0, steps = 0;
+		for (int i = 0; i < nums.length - 1; i++) {
+			reachIndex = Math.max(reachIndex, i + nums[i]);
+			if (i == lastReachIndex) {
+				steps++;
+				lastReachIndex = reachIndex;
+				if (reachIndex >= nums.length - 1) break; //found it.
+			}
+		}
+		return steps;
+	}
+    
+    public int jumpDP(int[] nums) {
+        //容易TLE
+        int n = nums.length;
+        // minJump record the min number of jumps from 0 to each of the indices.
+        int[] dp = new int[n];
+        // we do not need to jump for index 0.
+        dp[0] = 0;
+        for (int i = 1; i < n; i++) {
+             dp[i] = Integer.MAX_VALUE;
+             for (int j = i - 1; j >= 0; j--) {
+                if (j + nums[j] >= i) {
+              // minJump[i] = min(minJump[j] + 1) for all the j < i
+              // and can jump from j to i.
+                       dp[i] = Math.min(dp[i], dp[j] + 1);
+                }
+             }
+        }
+        return dp[nums.length - 1];
+    }
+
+    public int jumpExercise(int[] nums) {
+        int n = nums.length;
+        int res = 0;
+        int last = 0;// the maximum distance that can be reached by using "res+1" steps
+        int curr = 0;
+        for (int i = 0; i < n; ++i) {
+           if (i > last) {
+               last = curr;
+               res++;
+            }
+            curr = Math.max(curr, i+nums[i]);
+        }
+        return res;
+    }
+}
+
+
+// 首先来看DP是在什么情况下表现比较糟糕的。 即每个点的步数都很大时， 时间复杂度退化为(n * n).再来考虑为什么会复杂度高（即看是否存在着重复运算） 
+// 举一个简单的例子： 
+// a[n] = [6,5,4,3,2,1,1,1] 
+// 这个例子几乎就是造成DP超时的例子的简化版。
+// 不难发现其实造成了大量的不必要计算。 比如在处理完a[0]之后， 处理a[1]时，从a[1 + 1] ~ a[0 + a[0]]这部分的比较是不必要的， 因为显然之前能够直达的话就不可能更新到更小的值。
+// 于是自然就会产生一个想法：把每一步能够到达的最大点的坐标记录下来，下一步能够到达的最大点的坐标一定只能从当前步数能到达的最大点来得到， 而不是从之前就已经能够到的最大点来得到。 
+// 语言描述比较无力， 下面是体现这种想法的主要计算式： 
+// max[i] = maximum(nums from max[i - 2] to max[i - 1]); 
+// 没有做很严谨的分析， 从直觉上说， 这种做法的主要改进就是记忆化了max数组从而可以设置了搜索的下界。 
+// 时间复杂度优化为了O(n)算是一个不错的改进了。
