@@ -1,0 +1,52 @@
+3. Longest Substring Without Repeating Characters
+Given a string, find the length of the longest substring without repeating characters.
+
+Example 1:
+
+Input: "abcabcbb"
+Output: 3 
+Explanation: The answer is "abc", with the length of 3. 
+Example 2:
+
+Input: "bbbbb"
+Output: 1
+Explanation: The answer is "b", with the length of 1.
+Example 3:
+
+Input: "pwwkew"
+Output: 3
+Explanation: The answer is "wke", with the length of 3. 
+             Note that the answer must be a substring, "pwke" is a subsequence and not a substring.
+             
+class Solution {
+    public int lengthOfLongestSubstring(String s) {
+        if (s == null || s.length() == 0) return 0;
+        Map<Character, Integer> map = new HashMap<Character, Integer>();
+        int maxLen = 0;
+        for (int i = 0, j = 0; i < s.length(); i++) {
+            if (map.containsKey(s.charAt(i))) {
+                j = Math.max(j, map.get(s.charAt(i)) + 1);
+            }
+            map.put(s.charAt(i),i); //为什么不用else,因为即使重复的也要更新map里面的位置，else是错误的  
+            maxLen = Math.max(maxLen, i - j + 1);
+        }
+        return maxLen;
+    }
+    
+    
+    public int lengthOfLongestSubstring2(String s) {
+        if (s == null || s.length() == 0) return 0;
+        HashMap<Character, Integer> map = new HashMap<>();
+        int res = 0;
+        //j代表不重复的起点位置
+        //map里面放不重复的character的位置
+        for (int i = 0, j = 0; i < s.length(); i++) {
+            if (map.containsKey(s.charAt(i))) {
+                j = Math.max(j, map.get(s.charAt(i)) + 1); //如果去掉j=max(j, map.get([i]) + 1)abba j = 2,b=2;j=max(2, 1);j=仍然=2
+            }
+            map.put(s.charAt(i), i);
+            res = Math.max(res, i - j + 1);
+        }
+        return res;
+    }
+}
