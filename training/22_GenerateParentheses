@@ -1,0 +1,18 @@
+class Solution {
+        public List<String> generateParenthesis(int n) {
+            List<String> res = new ArrayList<String>();
+            dfs(n, res, 0, 0, "");
+            return res;
+        }
+        private void dfs(int n, List<String> res, int left, int right, String path) {
+            if (right == n) {
+                res.add(path);
+            }
+            if (left < n) {
+                dfs(n, res, left + 1, right, path + "(");
+            }
+            if (right < left) {
+                dfs(n, res, left, right + 1, path + ")");
+            }
+        }
+}
