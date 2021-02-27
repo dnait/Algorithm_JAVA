@@ -1,0 +1,83 @@
+class TrieNode{
+    TrieNode[] children = new TrieNode[26];
+    String word;
+}
+    
+class Solution {
+    public List<String> findWords(char[][] board, String[] words) {//Trie
+        List<String> res = new ArrayList<String>();
+        TrieNode root = buildTrie(words);
+        boolean[][] visited = new boolean[board.length][board[0].length];
+        if (board == null || board.length == 0 || words == null || words.length == 0) return res;
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board[0].length; j++) {
+                dfs(board, res, i, j, root, visited);
+            }
+        }
+        return res;
+    }
+    
+    private void dfs(char[][] board, List<String> res, int i, int j, TrieNode trie, boolean[][] visited) {
+        if (i < 0 || j < 0 || i >= board.length || j >= board[0].length || visited[i][j] == true) return;
+        char c = board[i][j];
+        if (trie.children[c - 'a'] == null) return;
+        trie = trie.children[c - 'a'];
+        if (trie.word != null) {
+            res.add(trie.word);
+            trie.word = null;  //deduplicate
+        }
+        visited[i][j] = true;
+        if (i > 0) dfs(board, res, i - 1, j, trie, visited);
+        if (j > 0) dfs(board, res, i, j - 1, trie, visited);
+        if (i + 1 < board.length) dfs(board, res, i + 1, j, trie, visited);
+        if (j + 1 < board[0].length) dfs(board, res, i, j + 1, trie, visited);
+        visited[i][j] = false;
+    }
+    
+    private TrieNode buildTrie(String[] words) {
+        TrieNode root = new TrieNode();
+        for (String word : words) {
+            TrieNode trie = root;
+            for (char c : word.toCharArray()) {
+                if (trie.children[c - 'a'] == null) {
+                    trie.children[c - 'a'] = new TrieNode();
+                }
+                trie = trie.children[c - 'a'];   
+            }
+            trie.word = word;
+        }
+        return root; //其实就是相当于建一个树带着String 这样可以直接在dfs里面添加结果
+    }
+    
+    //TLE
+    public List<String> findWordsTLE(char[][] board, String[] words) {
+        List<String> res = new ArrayList<String>();
+        if (board == null || board.length == 0 || words == null || words.length == 0) return res;
+        int m = board.length;
+        int n = board[0].length;
+        boolean[][] visited = new boolean[m][n];
+        Set<String> dict = new HashSet<String>(Arrays.asList(words));
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                dfs(board, dict, res, i, j, 0, new StringBuilder(),visited);
+            }
+        }
+        return res;
+    }
+    private void dfs(char[][]board, Set<String> words, List<String> res, int i, int j, int start, StringBuilder sb, boolean[][] visited) {
+        if (i < 0 || i >= board.length || j < 0 || j >= board[0].length || visited[i][j] == true) {
+            return;
+        }
+        sb.append(board[i][j]);//try one character
+        if (words.contains(sb.toString()) && !res.contains(sb.toString())) {//find the word in dict
+            res.add(sb.toString()); //注意要去重，比如input (["a","a","a"],输出是["a","a"]);
+        }
+        visited[i][j] = true;
+        dfs(board, words, res, i + 1, j, start + 1, sb, visited);
+        dfs(board, words, res, i - 1, j, start + 1, sb, visited);
+        dfs(board, words, res, i, j + 1, start + 1, sb, visited);
+        dfs(board, words, res, i, j - 1, start + 1, sb, visited);
+        sb.deleteCharAt(sb.length() - 1);
+        visited[i][j] = false;
+    }
+}
