@@ -1,0 +1,55 @@
+class Trie {
+    Trie[] children;
+    List<String> words;
+
+    public Trie() {
+        children = new Trie[26];
+        words = new ArrayList<>();
+    }
+
+    public void insert(String word) {
+        Trie cur = this;
+        for (char c : word.toCharArray()) {
+            cur.words.add(word);
+            if (cur.children[c - 'a'] == null) {
+                cur.children[c - 'a'] = new Trie();
+            }
+            cur = cur.children[c - 'a'];
+        }
+        cur.words.add(word);
+    }
+}
+
+class WordFilter {
+   Trie root;
+    Map<String, Integer> map;
+    
+    public WordFilter(String[] words) {
+        root = new Trie();
+        map = new HashMap<>();
+        for (int i = words.length - 1; i >= 0; i--) {
+            if (!map.containsKey(words[i])) map.put(words[i], i);
+            root.insert(words[i]);
+        }
+    }
+    
+    public int f(String prefix, String suffix) {
+       List<String> words = find(prefix);
+        if (words == null) return -1;
+        for (String word : words) {
+            if (word.endsWith(suffix)) return map.get(word);
+        }
+        return -1;
+    }
+    
+      private List<String> find(String prefix) {
+        if (prefix == null || prefix.length() == 0) return root.words;
+        Trie cur = root;
+        for (int i = 0; i < prefix.length(); i++) {
+            char ch = prefix.charAt(i);
+            if (cur.children[ch - 'a'] == null) return null;
+            cur = cur.children[ch - 'a'];
+        }
+        return cur.words;   
+    }
+}
