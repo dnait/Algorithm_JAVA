@@ -1,0 +1,69 @@
+class Solution {
+    public String minAbbreviation(String target, String[] dictionary) {
+        if (dictionary == null || dictionary.length == 0) {
+            return String.valueOf(target.length());
+        }
+
+        PriorityQueue<String> abbreviations = new PriorityQueue<>((a, b)->(a.length() - b.length()));
+        getAbbreviations(target, 0, 0, "", abbreviations);
+
+        while (!abbreviations.isEmpty()) {
+            String curAbbreviation = abbreviations.remove();
+            boolean noConflict = true;
+
+            for (String word : dictionary) {
+                if (isValidAbbreviation(word, curAbbreviation)) {
+                    noConflict = false;
+                    break;
+                }
+            }
+
+            if (noConflict) {
+                return curAbbreviation;
+            }
+        }
+        return "";
+    }
+
+    public void getAbbreviations(String target, int index, int count, String abbr, PriorityQueue<String> abbreviations) {
+        if (index == target.length()) {
+            if (count > 0) {
+                abbr += count;
+            }
+            abbreviations.add(abbr);
+            return;
+        }
+
+        getAbbreviations(target, index + 1, count + 1, abbr, abbreviations);
+        getAbbreviations(target, index + 1, 0, abbr + (count == 0 ? "" : count) + target.charAt(index), abbreviations);
+    }
+
+    public boolean isValidAbbreviation(String word, String abbr) {
+        int i = 0, j = 0;
+        int num = 0;
+
+        while (i < word.length() && j < abbr.length()) {
+            if (Character.isDigit(abbr.charAt(j))) {
+                num = 10 * num + abbr.charAt(j) - '0';
+
+                if (num == 0) {
+                    return false;
+                }
+                ++j;
+            }
+            else {
+                i += num;
+
+                if (i >= word.length() || word.charAt(i) != abbr.charAt(j)) {
+                    return false;
+                }
+                num = 0;
+                ++i;
+                ++j;
+            }
+        }
+        i += num;
+
+        return i == word.length() && j == abbr.length();
+    }
+}   
