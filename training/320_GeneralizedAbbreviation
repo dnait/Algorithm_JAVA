@@ -1,0 +1,23 @@
+class Solution {
+    public List<String> generateAbbreviations(String word) {
+        List<String> res = new ArrayList<>();
+        dfs(word, res, "",0,0);
+        return res;
+    }
+    private void dfs(String word, List<String> res, String currStr, int pos, int count) {
+        if (pos == word.length()) {
+            if (count > 0) {
+                res.add(currStr + count);
+            } else {
+                res.add(currStr);
+            }
+            return;
+        }
+        dfs(word, res, currStr, pos + 1, count + 1);
+        if (count > 0) {
+            dfs(word, res, currStr + count + word.charAt(pos), pos + 1, 0);
+        } else {
+            dfs(word, res, currStr + word.charAt(pos), pos + 1, 0);
+        }
+    }
+}
