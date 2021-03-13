@@ -1,0 +1,38 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode[] nodes) {
+        Set<TreeNode> set = new HashSet<TreeNode>(Arrays.asList(nodes));
+        /*注意如果直接用Integer放set里面会出现下面type不一致的错误。
+            Set<Integer> set = new HashSet<Integer>(Arrays.asList(nodes));
+        会出现 Line 14: error: no suitable constructor found for HashSet(List<TreeNode>)
+          Set<Integer> set = new HashSet<Integer>(Arrays.asList(nodes));
+           */ 
+        return lcaHelper(root, set);
+    }
+    private TreeNode lcaHelper(TreeNode root, Set<TreeNode> set) {
+        if (root == null) {
+            return null;
+        }
+        if (set.contains(root)) {
+            return root;
+        }
+        TreeNode leftSearchNode = lcaHelper(root.left, set);
+        TreeNode rightSearchNode = lcaHelper(root.right, set);
+        if (leftSearchNode == null) {
+            return rightSearchNode;
+        } else if (rightSearchNode == null) {
+            return leftSearchNode;
+        } else {
+            return root;
+        }
+    }
+}
+
