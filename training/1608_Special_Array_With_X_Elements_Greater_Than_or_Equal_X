@@ -1,0 +1,29 @@
+//very slow, beat 9% solutions
+class Solution {
+    public int specialArray(int[] nums) {
+        int len = nums.length;
+        for (int i = len; i > 0; i--) {
+            int count = 0;
+            for (int x : nums) {
+                if (x >= i) {
+                    count++;
+                }
+            }
+            if (count == i) {
+                return count;
+            }
+        }
+        return -1;
+    }
+}
+//java8
+class Solution {
+    public int specialArray(int[] nums) {
+        for (int i = 0; i <= nums.length; i++) {
+            final int x = i;
+            int count = (int) Arrays.stream(nums).filter(n -> n >= x).count();
+            if (count == i) return i;
+        }
+        return -1;
+    }
+}
