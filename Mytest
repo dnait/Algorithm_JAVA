@@ -1,0 +1,57 @@
+import requests
+from bs4 import BeautifulSoup
+import tkinter as tk
+from tkinter import messagebox
+
+# 
+session = requests.Session()
+login_url = 'https://example.com/login'
+data = {
+    'username': 'your_username',
+    'password': 'your_password'
+}
+session.post(login_url, data=data)
+
+# 
+table_url = 'https://example.com/page-with-table'
+response = session.get(table_url)
+soup = BeautifulSoup(response.content, 'html.parser')
+
+# 
+table = soup.find('table')  # 
+rows = table.find_all('tr')
+
+table_data = []
+for row in rows:
+    cells = row.find_all('td')
+    row_data = [cell.get_text(strip=True) for cell in cells]
+    link = row.find('a')
+    link_url = link['href'] if link else ''
+    row_data.append(link_url)
+    table_data.append(row_data)
+
+# GUI
+root = tk.Tk()
+root.title("Table Data Viewer")
+root.geometry("600x400")
+
+# 
+listbox = tk.Listbox(root, width=100, height=20)
+for index, row_data in enumerate(table_data):
+    listbox.insert(index, f"Row {index + 1}: {', '.join(row_data[:-1])}")
+
+listbox.pack()
+
+# 
+def on_select(event):
+    selected_row = listbox.curselection()
+    if selected_row:
+        row_index = selected_row[0]
+        selected_data = table_data[row_index]
+        row_text = f"Row {row_index + 1} Data:\n\n" + "\n".join(selected_data[:-1])
+        link_text = f"Link: {selected_data[-1]}" if selected_data[-1] else "No link"
+        messagebox.showinfo("Row Data", row_text + "\n\n" + link_text)
+
+listbox.bind('<<ListboxSelect>>', on_select)
+
+root.mainloop()
